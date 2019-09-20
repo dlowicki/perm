@@ -1,4 +1,4 @@
 ﻿param (
 	[string]$pfad
 )
-Get-ChildItem -Path $pfad -Name
+Get-ChildItem -Path $pfad -Name -directory
