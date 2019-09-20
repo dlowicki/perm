@@ -19,29 +19,37 @@
         $dir = Shell_Exec ("powershell.exe -Command .\pfad.ps1 -Pfad $path");
         $exp = explode("\n", $dir);
 
-
-
         echo "<ul>";
         echo "<li><p onClick='dirBack()'>..</p></li>";
+
+        $r = 0;
         foreach ($exp as $key => $value) {
+
+
+          if($r == sizeof($exp)-1){
+            break;
+          }
+
+
           $link = $value;
 
           echo '<li><p onClick="dirChange(';
           echo "' $link '";
-          echo ')">' . $link . '</p></li>';
-
+          echo ')">' . $link . '</p> <button onClick="dirInfo(';
+          echo "'" . $link . "'";
+          echo ')">Infos</button></li>';
+          $r++;
         }
         echo "</ul>";
-
-
-
-
       } else {
         header("Location: index.php?path=C:\\temp\\");
       }
 
     ?>
 
+    <p id='desc'>
+
+    </p>
 
     <script>
 
@@ -85,6 +93,25 @@
           success: function(result) {
             if(result != "error"){
               window.location.href = "index.php?path=" + result;
+            } else {
+              alert("Ein Fehler ist aufgetreten");
+            }
+          }
+        });
+      }
+
+      function dirInfo(link) {
+        var param = getParameter();
+        link = link.replace(/\s/g, '');
+        var verlinkung = param + link + "\\";
+
+        $.ajax({
+          url: "sync.php",
+          method: "POST",
+          data: {path: verlinkung, action: 'info'},
+          success: function(result) {
+            if(result != "error"){
+              document.getElementById('desc').innerHTML = result;
             } else {
               alert("Ein Fehler ist aufgetreten");
             }
