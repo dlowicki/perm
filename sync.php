@@ -12,20 +12,14 @@ if(isset($_POST['path'])){
     $rights = getRightsFromDir($perm);
 
     foreach ($rights as $key => $value) {
+      echo "<div class='permission_box'>";
       foreach ($value as $key2 => $value2) {
-        echo $key2 . " - " . $value2 . "<br>";
+        echo "<p>" . $key2 . " - " . $value2 . "</p>";
       }
-      echo "<br>";
+      echo "</div>";
     }
 
 
-
-    /*foreach ($exp as $key => $value) {
-      if($key == 0){
-        continue;
-      }
-      echo "FileSystemRights " . $value . "<br>";
-    }*/
 
     return;
   }

@@ -4,8 +4,19 @@
     <meta charset="utf-8">
     <title>Perm | Startseite</title>
     <script src="api/jquery.min.js"></script>
+    <link rel="stylesheet" href="css/style.css">
   </head>
   <body>
+    <div class="navigation">
+      <ul>
+        <li><a>Startseite</a></li>
+        <li><a>Synchronisieren</a></li>
+      </ul>
+    </div>
+
+    <div class="container">
+
+
     <?php
 
       if(isset($_GET['path'])){
@@ -16,11 +27,16 @@
           header("Location: index.php?path=C:\\temp\\");
         }
 
-        $dir = Shell_Exec ("powershell.exe -Command .\pfad.ps1 -Pfad $path");
+        $dir = Shell_Exec("powershell.exe -Command .\pfad.ps1 -Pfad $path");
+
         $exp = explode("\n", $dir);
 
+
+
+        /*STYLE*/
+        echo "<div class='content_container'>";
         echo "<ul>";
-        echo "<li><p onClick='dirBack()'>..</p></li>";
+        echo "<li><img src='dir.jpg' width='25px'><p onClick='dirBack()'>..</p></li>";
 
         $r = 0;
         foreach ($exp as $key => $value) {
@@ -33,24 +49,35 @@
 
           $link = $value;
 
-          echo '<li><p onClick="dirChange(';
+          echo '<li><img src="dir.jpg" width="25px"><p onClick="dirChange(';
           echo "' $link '";
           echo ')">' . $link . '</p> <button onClick="dirInfo(';
           echo "'" . $link . "'";
           echo ')">Infos</button></li>';
           $r++;
         }
+
         echo "</ul>";
+        echo "</div>";
+        /*STYLE*/
+
+
+
+
       } else {
         header("Location: index.php?path=C:\\temp\\");
       }
 
     ?>
 
-    <p id='desc'>
+    <p id='permission_container'>
 
     </p>
 
+
+
+
+    </div>
     <script>
 
       function dirChange(link) {
@@ -111,7 +138,7 @@
           data: {path: verlinkung, action: 'info'},
           success: function(result) {
             if(result != "error"){
-              document.getElementById('desc').innerHTML = result;
+              document.getElementById('permission_container').innerHTML = "<h2>" + link + "</h2>" + result;
             } else {
               alert("Ein Fehler ist aufgetreten");
             }
