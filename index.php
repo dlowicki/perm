@@ -70,9 +70,24 @@
 
     ?>
 
-    <p id='permission_container'>
-
-    </p>
+    <div id='permission_container'>
+      <form id="permission_form">
+        <h2>Berechtigungen für NAME</h2>
+        <fieldset>
+          <table>
+            <tr><th>Berechtigung</th><th>Zulassen</th></tr>
+            <tr><td>Vollzugriff: </td><td><input type="checkbox" name="vollzugriff"></td></tr>
+            <tr><td>Ändern: </td> <td><input type="checkbox" name="aendern"></td></tr>
+            <tr><td>Lesen, Ausführen: </td> <td><input type="checkbox" name="ausfuehren"></td></tr>
+            <tr><td>Ordnerinhalt anzeigen: </td> <td><input type="checkbox" name="o_anzeigen"></td></tr>
+            <tr><td>Lesen: </td> <td><input type="checkbox" name="lesen"></td></tr>
+            <tr><td>Schreiben: </td> <td><input type="checkbox" name="schreiben"></td></tr>
+            <tr><td>Spezielle Berechtigungen: </td> <td><input type="checkbox" name="s_berechtigungen"></td></tr>
+          </table>
+          <input type="submit" name="button" value="Übernehmen">
+        </fieldset>
+      </form>
+    </div>
 
 
 
@@ -92,6 +107,26 @@
           success: function(result) {
             if(result != "error"){
               window.location.href = "index.php?path=" + result;
+            } else {
+              alert("Ein Fehler ist aufgetreten");
+            }
+          }
+        });
+      }
+
+      function loadPermissionFor(value){
+
+        var param = getParameter();
+        var link = document.getElementById("path_headline").innerHTML;
+        var verlinkung = param + link;
+
+        $.ajax({
+          url: "sync.php",
+          method: "POST",
+          data: {loadPermissionFor: value, path: verlinkung, action: 'info'},
+          success: function(result) {
+            if(result != "error"){
+              document.getElementById('permission_container').innerHTML = "<h2>" + link + "</h2>" + result;
             } else {
               alert("Ein Fehler ist aufgetreten");
             }
@@ -138,7 +173,7 @@
           data: {path: verlinkung, action: 'info'},
           success: function(result) {
             if(result != "error"){
-              document.getElementById('permission_container').innerHTML = "<h2>" + link + "</h2>" + result;
+              document.getElementById('permission_container').innerHTML = "<h2 id='path_headline'>" + link + "</h2>" + result;
             } else {
               alert("Ein Fehler ist aufgetreten");
             }
