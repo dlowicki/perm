@@ -1,13 +1,14 @@
 <?php
 require("api/functions.php");
+
 if(isset($_POST['path'])){
 
-  if(isset($_POST['action']))
-  {
+  if(isset($_POST['action'])) {
     $perm = Shell_Exec ("powershell.exe -Command .\list_permission.ps1 -Pfad " . $_POST['path']);
 
     $exp = explode("FileSystemRights", $perm);
 
+    // Array user wird mit allen Usern aus dem Directory gespeichert
     $user = getUserFromDir($perm);
     $userById = array();
     echo "<div class='permission_user'>";
@@ -21,8 +22,7 @@ if(isset($_POST['path'])){
     }
     echo "</div>";
 
-    if(isset($_POST['loadPermissionFor']))
-    {
+    if(isset($_POST['loadPermissionFor'])) {
       $rights = getRightsFromDir($perm);
       foreach ($rights as $key => $value) {
         if($key == $_POST['loadPermissionFor']){
@@ -38,4 +38,9 @@ if(isset($_POST['path'])){
   }
   echo $_POST['path'];
 }
-?>
+
+
+
+
+
+ ?>

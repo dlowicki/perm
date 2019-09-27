@@ -72,6 +72,17 @@
   margin-right: 1%;
 }
 
+#content_container_icon_create {
+  width: 3%;
+  height: 25px;
+  float: right;
+  margin-right: 2%;
+}
+
+#content_container_icon_create:hover {
+  cursor: pointer;
+}
+
 .content_container ul li p {
   float: left;
   margin-left: 1%;

@@ -53,7 +53,7 @@
           echo "' $link '";
           echo ')">' . $link . '</p> <button onClick="dirInfo(';
           echo "'" . $link . "'";
-          echo ')">Infos</button></li>';
+          echo ')">Infos</button><img src="img/pen.svg" id="content_container_icon_create"></li>';
           $r++;
         }
 
@@ -96,7 +96,7 @@
     <script>
 
       function dirChange(link) {
-        var param = getParameter();
+        var param = getParameterPath();
         link = link.replace(/\s/g, '');
         var verlinkung = param + link + "\\";
 
@@ -115,8 +115,7 @@
       }
 
       function loadPermissionFor(value){
-
-        var param = getParameter();
+        var param = getParameterPath();
         var link = document.getElementById("path_headline").innerHTML;
         var verlinkung = param + link;
 
@@ -126,7 +125,7 @@
           data: {loadPermissionFor: value, path: verlinkung, action: 'info'},
           success: function(result) {
             if(result != "error"){
-              document.getElementById('permission_container').innerHTML = "<h2>" + link + "</h2>" + result;
+              document.getElementById('permission_container').innerHTML = "<h2 id='path_headline'>" + link + "</h2>" + result;
             } else {
               alert("Ein Fehler ist aufgetreten");
             }
@@ -136,7 +135,7 @@
 
       function dirBack() {
         var splitted;
-        var param = getParameter();
+        var param = getParameterPath();
         var split = param.split("\\");
         var length = (split.length-2);
 
@@ -163,7 +162,7 @@
       }
 
       function dirInfo(link) {
-        var param = getParameter();
+        var param = getParameterPath();
         link = link.replace(/\s/g, '');
         var verlinkung = param + link + "\\";
 
@@ -181,7 +180,7 @@
         });
       }
 
-      function getParameter() {
+      function getParameterPath() {
         var url_str = window.location.href;
         var url = new URL(url_str);
         var params = url.searchParams.get("path")

@@ -1,4 +1,6 @@
 <?php
+//$perm = Shell_Exec ("powershell.exe -Command ..//.\list_permission.ps1 -Pfad " . "C:\\Temp\\");
+//print_r(getRightsFromDir($perm));
 
 function changePermissionName($permission) {
   // Lesen ausführen -> InheritanceFlags = ContainerInherit, ObjectInherit
@@ -13,7 +15,6 @@ function changePermissionName($permission) {
   // IsInherited = Wird vererbt
   // IdentityReference = Benutzername
 
-
   $perm = array(
     "FullControl" => "Vollzugriff",
     "Write, Synchronize" => "Schreiben, Synchronisieren",
@@ -26,6 +27,15 @@ function changePermissionName($permission) {
     "InheritOnly" => "nur an untergeordnete Objekte weitergegeben wird. Dies schließt untergeordnete Container- und Endobjekte ein.",
     "NoPropagateInherit" => "nicht an untergeordnete Objekte weitergegeben wird."
   );
+
+
+  foreach($permission as $key => $value) {
+    if($key == "FileSystemRights"){
+      if(in_array($perm, $value)){
+
+      }
+    }
+  }
 }
 
 function getUserFromDir($perm) {
@@ -39,7 +49,6 @@ function getUserFromDir($perm) {
   }
   return $user;
 }
-
 
 function getRightsFromDir($perm) {
 
