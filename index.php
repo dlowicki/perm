@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <title>Perm | Startseite</title>
     <script src="api/jquery.min.js"></script>
+    <script src="api/function.js"></script>
     <link rel="stylesheet" href="css/style.css">
   </head>
   <body>
@@ -53,7 +54,9 @@
           echo "' $link '";
           echo ')">' . $link . '</p> <button onClick="dirInfo(';
           echo "'" . $link . "'";
-          echo ')">Infos</button><img src="img/pen.svg" id="content_container_icon_create"></li>';
+          echo ')">Infos</button><img src="img/pen.svg" onClick="listDirectory(';
+          echo "' $link '";
+          echo ')" id="content_container_icon_create" class="content_container_icon_create"></li>';
           $r++;
         }
 
@@ -89,9 +92,6 @@
       </form>
     </div>
 
-
-
-
     </div>
     <script>
 
@@ -114,6 +114,14 @@
         });
       }
 
+      function listDirectory(link) {
+        var param = getParameterPath();
+        var link = document.getElementById("path_headline").innerHTML;
+        var verlinkung = param + link;
+
+        alert(verlinkung);
+      }
+
       function loadPermissionFor(value){
         var param = getParameterPath();
         var link = document.getElementById("path_headline").innerHTML;
@@ -132,6 +140,9 @@
           }
         });
       }
+
+
+
 
       function dirBack() {
         var splitted;
