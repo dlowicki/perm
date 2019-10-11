@@ -118,7 +118,7 @@
   width: 50%;
   margin: auto;
   margin-top: 2%;
-  display: none;
+  display: block;
 }
 
 #permission_form h2 {

@@ -50,6 +50,40 @@ function getUserFromDir($perm) {
   return $user;
 }
 
+//createToken("dlowicki","C:/temp/test");
+
+function createToken($benutzer, $pfad) {
+  $con = new mysqli("localhost", "root", "", "permission");
+
+  if(!$con){
+    echo "Verbindung konnte nicht hergestellt werden!";
+    return false;
+  }
+
+  $vz = true;
+  $an = false;
+  $la = false;
+  $oa = false;
+  $l = false;
+  $s = false;
+  $sb = true;
+  $uniq = uniqid() . uniqid() . uniqid();
+
+
+  $sql = "INSERT INTO active (benutzer,pfad,vollzugriff,aendern,lesen_ausfuehren,ordnerinhalt_anzeigen,lesen,schreiben,spezielle_berechtigungen,token) ";
+  $sql2 = $sql . "VALUES ('$benutzer','$pfad','1','0','0','0','0','0','1','$uniq')";
+  $res = $con->query($sql2) OR die($con->connect_errno);
+
+  if($res === TRUE){
+    echo "Gespeichert";
+  }
+
+}
+
+function readToken($token) {
+  
+}
+
 function getRightsFromDir($perm) {
 
   $rights = array();
