@@ -10,13 +10,23 @@
   <body>
     <div class="navigation">
       <ul>
-        <li><a>Startseite</a></li>
-        <li><a>Synchronisieren</a></li>
+        <li><a class="nav_current">Startseite</a></li>
+        <!-- <li><a href="synchronisieren.php">Synchronisieren</a></li> -->
       </ul>
     </div>
 
     <div class="container">
-
+      <div class="sidebar">
+        <div class="sidebar_message">
+          <p>Status STATE Sie können Rechte anfordern</p>
+        </div>
+        <ul>
+          <li>Ordner suchen</li>
+          <li id="sidebar3">Token auflösen</li>
+          <li>User Management</li>
+          <li>ACP</li>
+        </ul>
+      </div>
 
     <?php
 
@@ -32,62 +42,78 @@
 
         $exp = explode("\n", $dir);
 
-
-
         /*STYLE*/
-        echo "<div class='content_container'>";
-        echo "<ul>";
-        echo "<li><img src='dir.jpg' width='25px'><p onClick='dirBack()'>..</p></li>";
+        echo "<div class='container_ordner_suchen'>";
+        echo "<div class='ordner_suchen_search'>
+                <h2>Ordner suchen</h2>
+                <div class='ordner_suchen_search_input'>
+                  <select name='laufwerk'>
+                    <option value='C'>C</option>
+                    <option value='D'>D</option>
+                    <option value='E'>E</option>
+                  </select>
+                  <input type='text'>
+                  <input type='submit' value='Suchen'>
+                </div>
+              </div>";
 
-        $r = 0;
-        foreach ($exp as $key => $value) {
 
+          echo "<div class='ordner_suchen'>";
+            echo "<h3>" . $_GET['path'] . "</h3>";
+            echo "<ul>";
+            echo "<li><img src='dir.jpg' width='25px'><p onClick='dirBack()'>..</p></li>";
 
-          if($r == sizeof($exp)-1){
-            break;
-          }
+            $r = 0;
+            foreach ($exp as $key => $value) {
 
+              if($r == sizeof($exp)-1){
+                break;
+              }
 
-          $link = $value;
+              $link = $value;
 
-          echo '<li><img src="dir.jpg" width="25px"><p onClick="dirChange(';
-          echo "' $link '";
-          echo ')">' . $link . '</p> <button onClick="dirInfo(';
-          echo "'" . $link . "'";
-          echo ')">Infos</button><img src="img/pen.svg" onClick="listDirectory(';
-          echo "' $link '";
-          echo ')" id="content_container_icon_create" class="content_container_icon_create"></li>';
-          $r++;
-        }
+              echo '<li><img src="dir.jpg" width="25px"><p onClick="dirChange(';
+              echo "'$link'";
+              echo ')">' . $link . '</p> <button onClick="dirInfo(';
+              echo "'" . $link . "'";
+              echo ')">Infos</button><img src="img/pen.svg" onClick="listDirectory(';
+              echo "' $link '";
+              echo ')" id="content_container_icon_create" class="content_container_icon_create"></li>';
+              $r++;
+            }
 
-        echo "</ul>";
+            echo "</ul>";
+          echo "</div>";
         echo "</div>";
         /*STYLE*/
-
-
-
-
       } else {
         header("Location: index.php?path=C:\\temp\\");
       }
 
     ?>
 
-    <div id='permission_container'>
-      <form id="permission_form">
-        <h2>Berechtigungen für NAME</h2>
+    <div id='container_permission'>
+      <form id="permission_form" action="sync.php" method="POST">
+        <h2>Berechtigungen für <span class='form_directory_headline'></span></h2>
+
+        <p>
+          Hier können Sie sich Ihre gewünschten Berechtigungen aussuchen und den dazugehörigen Link generieren.
+        </p>
+
         <fieldset>
           <table>
-            <tr><th>Berechtigung</th><th>Zulassen</th></tr>
-            <tr><td>Vollzugriff: </td><td><input type="checkbox" name="vollzugriff"></td></tr>
-            <tr><td>Ändern: </td> <td><input type="checkbox" name="aendern"></td></tr>
-            <tr><td>Lesen, Ausführen: </td> <td><input type="checkbox" name="ausfuehren"></td></tr>
-            <tr><td>Ordnerinhalt anzeigen: </td> <td><input type="checkbox" name="o_anzeigen"></td></tr>
-            <tr><td>Lesen: </td> <td><input type="checkbox" name="lesen"></td></tr>
-            <tr><td>Schreiben: </td> <td><input type="checkbox" name="schreiben"></td></tr>
-            <tr><td>Spezielle Berechtigungen: </td> <td><input type="checkbox" name="s_berechtigungen"></td></tr>
+            <tr><th>Berechtigung</th><th class="table_right">Zulassen</th></tr>
+            <tr><td>Vollzugriff: </td><td class="table_right"><input type="checkbox" name="vollzugriff"></td></tr>
+            <tr><td>Ändern: </td> <td class="table_right"><input type="checkbox" name="aendern"></td></tr>
+            <tr><td>Lesen, Ausführen: </td> <td class="table_right"><input type="checkbox" name="ausfuehren"></td></tr>
+            <tr><td>Ordnerinhalt anzeigen: </td> <td class="table_right"><input type="checkbox" name="o_anzeigen"></td></tr>
+            <tr><td>Lesen: </td> <td class="table_right"><input type="checkbox" name="lesen"></td></tr>
+            <tr><td>Schreiben: </td> <td class="table_right"><input type="checkbox" name="schreiben"></td></tr>
+            <tr><td>Spezielle Berechtigungen: </td> <td class="table_right"><input type="checkbox" name="s_berechtigungen"></td></tr>
           </table>
-          <input type="submit" name="button" value="Übernehmen">
+          <input type="text" name="benutzer" placeholder="Beantragen für..." required>
+          <input type="hidden" name="pfad" class="form_directory_headline">
+          <input type="submit" name="createToken" value="Link generieren">
         </fieldset>
       </form>
     </div>
@@ -115,11 +141,15 @@
       }
 
       function listDirectory(link) {
-        var param = getParameterPath();
-        var link = document.getElementById("path_headline").innerHTML;
-        var verlinkung = param + link;
+        document.getElementById("permission_form").style.display = "block";
 
-        alert(verlinkung);
+
+        var param = getParameterPath();
+        var verlinkung = param + link.trim();
+
+        //document.getElementById("form_directory_headline").innerHTML = verlinkung;
+        $('.form_directory_headline').text(verlinkung);
+        $('.form_directory_headline').val(verlinkung);
       }
 
       function loadPermissionFor(value){
@@ -133,16 +163,13 @@
           data: {loadPermissionFor: value, path: verlinkung, action: 'info'},
           success: function(result) {
             if(result != "error"){
-              document.getElementById('permission_container').innerHTML = "<h2 id='path_headline'>" + link + "</h2>" + result;
+              document.getElementById('container_permission').innerHTML = "<h2 id='path_headline'>" + link + "</h2>" + result;
             } else {
               alert("Ein Fehler ist aufgetreten");
             }
           }
         });
       }
-
-
-
 
       function dirBack() {
         var splitted;
@@ -183,7 +210,7 @@
           data: {path: verlinkung, action: 'info'},
           success: function(result) {
             if(result != "error"){
-              document.getElementById('permission_container').innerHTML = "<h2 id='path_headline'>" + link + "</h2>" + result;
+              document.getElementById('container_permission').innerHTML = "<h2 id='path_headline'>" + link + "</h2>" + result;
             } else {
               alert("Ein Fehler ist aufgetreten");
             }
@@ -197,6 +224,14 @@
         var params = url.searchParams.get("path")
         return params;
       }
+
+
+      $('#sidebar3').click(function(){
+        window.location.href = "synchronisieren.php";
+      });
+
+
+
     </script>
   </body>
 </html>

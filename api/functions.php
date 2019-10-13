@@ -52,36 +52,49 @@ function getUserFromDir($perm) {
 
 //createToken("dlowicki","C:/temp/test");
 
-function createToken($benutzer, $pfad) {
-  $con = new mysqli("localhost", "root", "", "permission");
-
+function getConnection() {
+  $con = new mysqli("localhost", "root", "123456", "permission");
   if(!$con){
     echo "Verbindung konnte nicht hergestellt werden!";
     return false;
   }
+  return $con;
+}
 
-  $vz = true;
-  $an = false;
-  $la = false;
-  $oa = false;
-  $l = false;
-  $s = false;
-  $sb = true;
+function createToken($benutzer, $pfad, $vz, $an, $la, $oa, $l, $s, $sb) {
+  $con = getConnection();
   $uniq = uniqid() . uniqid() . uniqid();
 
 
   $sql = "INSERT INTO active (benutzer,pfad,vollzugriff,aendern,lesen_ausfuehren,ordnerinhalt_anzeigen,lesen,schreiben,spezielle_berechtigungen,token) ";
-  $sql2 = $sql . "VALUES ('$benutzer','$pfad','1','0','0','0','0','0','1','$uniq')";
+  $sql2 = $sql . "VALUES ('$benutzer','$pfad','$vz','$an','$la','$oa','$l','$s','$sb','$uniq')";
   $res = $con->query($sql2) OR die($con->connect_errno);
 
   if($res === TRUE){
     echo "Gespeichert";
   }
-
 }
-
 function readToken($token) {
-  
+  $con = getConnection();
+  $data = array();
+
+  $sql = "SELECT benutzer, pfad, vollzugriff, aendern, lesen_ausfuehren,ordnerinhalt_anzeigen,lesen,schreiben,spezielle_berechtigungen FROM active WHERE token = '$token'";
+  $res = $con->query($sql) OR die($con->connect_errno);
+
+
+  foreach ($res as $key => $value) {
+    $data['benutzer'] = $value['benutzer'];
+    $data['pfad'] = $value['pfad'];
+    $data['vollzugriff'] = $value['vollzugriff'];
+    $data['aendern'] = $value['aendern'];
+    $data['lesen_ausfuehren'] = $value['lesen_ausfuehren'];
+    $data['ordnerinhalt_anzeigen'] = $value['ordnerinhalt_anzeigen'];
+    $data['lesen'] = $value['lesen'];
+    $data['schreiben'] = $value['schreiben'];
+    $data['spezielle_berechtigungen'] = $value['spezielle_berechtigungen'];
+  }
+
+  return $data;
 }
 
 function getRightsFromDir($perm) {

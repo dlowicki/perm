@@ -1,0 +1,29 @@
+User:
+Ordner von Laufwerk werden angezeigt. FERTIG
+User können Ordner auswählen -> Rechte werden dann angezeigt. FERTIG
+User können Rechte auswählen und Link generieren lassen. FERTIG
+Link kann an Admin gesendet werden. FERTIG
+
+Admin:
+Können Ordner auswählen und alle User mit Rechten auflisten lassen. FERTIG
+Können Link erhalten und durch den Link die angeforderten Rechte einsehen. FERTIG
+Haben die Möglichkeit, die Rechte vom Link zu ändern. FERTIG
+Können Link aktivieren lassen oder ablehnen. FERTIG
+
+User Management:
+Auflistung der Ordner, in denen User Rechte haben.
+
+ACP:
+Ordner anpassen.
+User Rechte von Ordner entfernen hinzufügen.
+
+Eventuell:
+Login für Admins
+Session und Cookies für Admins
+Archivierung oder Löschung der Tokens?
+Rechtesystem an/abschalten
+
+Sicherheit:
+Eintrag in DB
+Ausführen von script
+Infos abfrage für "nicht" Admin
