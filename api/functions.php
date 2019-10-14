@@ -50,8 +50,6 @@ function getUserFromDir($perm) {
   return $user;
 }
 
-//createToken("dlowicki","C:/temp/test");
-
 function getConnection() {
   $con = new mysqli("localhost", "root", "123456", "permission");
   if(!$con){
@@ -66,21 +64,21 @@ function createToken($benutzer, $pfad, $vz, $an, $la, $oa, $l, $s, $sb) {
   $uniq = uniqid() . uniqid() . uniqid();
 
 
-  $sql = "INSERT INTO active (benutzer,pfad,vollzugriff,aendern,lesen_ausfuehren,ordnerinhalt_anzeigen,lesen,schreiben,spezielle_berechtigungen,token) ";
-  $sql2 = $sql . "VALUES ('$benutzer','$pfad','$vz','$an','$la','$oa','$l','$s','$sb','$uniq')";
+  $sql = "INSERT INTO active (benutzer,pfad,vollzugriff,aendern,lesen_ausfuehren,ordnerinhalt_anzeigen,lesen,schreiben,spezielle_berechtigungen,aktiviert,token) ";
+  $sql2 = $sql . "VALUES ('$benutzer','$pfad','$vz','$an','$la','$oa','$l','$s','$sb','0','$uniq')";
   $res = $con->query($sql2) OR die($con->connect_errno);
 
   if($res === TRUE){
-    echo "Gespeichert";
+    echo "Token: $uniq";
   }
 }
+
 function readToken($token) {
   $con = getConnection();
   $data = array();
 
-  $sql = "SELECT benutzer, pfad, vollzugriff, aendern, lesen_ausfuehren,ordnerinhalt_anzeigen,lesen,schreiben,spezielle_berechtigungen FROM active WHERE token = '$token'";
+  $sql = "SELECT benutzer, pfad, vollzugriff, aendern, lesen_ausfuehren,ordnerinhalt_anzeigen,lesen,schreiben,spezielle_berechtigungen, aktiviert FROM active WHERE token = '$token'";
   $res = $con->query($sql) OR die($con->connect_errno);
-
 
   foreach ($res as $key => $value) {
     $data['benutzer'] = $value['benutzer'];
@@ -92,9 +90,21 @@ function readToken($token) {
     $data['lesen'] = $value['lesen'];
     $data['schreiben'] = $value['schreiben'];
     $data['spezielle_berechtigungen'] = $value['spezielle_berechtigungen'];
+    $data['aktiviert'] = $value['aktiviert'];
   }
 
   return $data;
+}
+
+function activateToken($token) {
+  $con = getConnection();
+  $sql = "UPDATE active SET active.aktiviert = '1' WHERE active.token = '$token'";
+  $res = $con->query($sql) OR die($con->connect_errno);
+
+  if($res === TRUE){
+    return true;
+  }
+  return false;
 }
 
 function getRightsFromDir($perm) {

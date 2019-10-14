@@ -114,10 +114,19 @@ if(isset($_POST['path'])){
   $pfad = $_POST['pfad'];
   $benutzer = $_POST['benutzer'];
   $token = $_POST['token'];
+  $data = readToken($token);
 
-  if($vz == true && $pfad != "" && $benutzer != "" && $token != null){
+
+  if($vz == true && $pfad != "" && $benutzer != "" && $token != null && $data['aktiviert'] == 0){
     Shell_Exec("powershell.exe -Command .\\fullcontrol.ps1 $benutzer $pfad");
-    header("Location: synchronisieren.php?updated=$token");
+    if(activateToken($token)){
+      header("Location: synchronisieren.php?updated=$token");
+    } else {
+      echo "Ein Fehler ist aufgetreten. Bitte bei einem Administrator melden!";
+    }
+
+  } else {
+    header("Location: synchronisieren.php?error=1");
   }
 
 }

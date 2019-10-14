@@ -28,7 +28,8 @@
       </div>
       <div class="container_listToken">
         <h2>Token einfügen und die geforderten Rechte auslesen lassen</h2>
-        <form id="form_listToken">
+        <form id="form_listToken" autocomplete="off">
+          <input autocomplete="false" name="hidden" type="text" style="display:none;">
           <input type="text" name="listToken_text" id="listToken_text" placeholder="Token einfügen...">
           <input type="submit" name="listToken_submit" value="Auslesen">
         </form>
@@ -66,6 +67,27 @@
     </div>
 
     <script>
+      $(document).ready(function(){
+        $("#listToken_text").keyup(function(){
+          var txt = $("#listToken_text").val();
+          if(txt != ""){
+            $.ajax({
+              url: "fetch.php",
+              method: "POST",
+              data: {search: txt},
+              success: function(result) {
+                if(result == "true"){
+                  document.getElementById('listToken_text').style.backgroundColor = "rgba(94, 201, 96, 0.7)";
+                } else {
+                  document.getElementById('listToken_text').style.backgroundColor = "rgba(200, 34, 27, 0.7)";
+                }
+              }
+            });
+          } else {
+            document.getElementById('listToken_text').style.backgroundColor = "white";
+          }
+        });
+      });
       function listDirectory(link) {
         document.getElementById("permission_form").style.display = "block";
 
@@ -135,15 +157,6 @@
       $('#sidebar1').click(function(){
         window.location.href = "index.php";
       });
-
-
-
-
-
-
-
-
-
 
     </script>
   </body>
